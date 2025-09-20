@@ -11,6 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
     addButton(panel, 'font-size', btnFetchFontSize)
     addButton(panel, 'border-radius', btnFetchBorderRadius)
     addButton(panel, 'z-index', btnFetchIndex)
+    addButton(panel, 'tags', btnFetchTags)
     addButton(panel, 'comments', btnComments)
     addButton(panel, 'printscreen', btnPrintscreen)
 })
@@ -185,6 +186,71 @@ function btnFetchColors() {
     return panel
 }
 
+function btnFetchTags() {
+
+    let nodes = [...document.body.querySelectorAll('*')]
+    let all = []
+    let style = {}
+    nodes.forEach(c => {
+        all.push(c.tagName)
+        style[c] = c.style.boxShadow
+    })
+    all = [...new Set(all.map(data => data.toLowerCase()))]
+
+    let p = document.getElementById('panel')
+    p?.remove()
+
+    let panel = document.createElement('div')
+    panel.id = 'panel'
+    panel.style.position = 'fixed'
+    panel.style.width = '300px'
+    panel.style.right = '0px'
+    panel.style.top = '0px'
+    panel.style.padding = '3px'
+    panel.style.background = '#000000CC'
+    panel.style.backdropFilter = 'blur(10px)'
+    panel.style.zIndex = '99999'
+    document.body.appendChild(panel)
+
+    panel.innerHTML = `
+        <div style="display: flex; justify-content: space-between; color: white; margin: 0px 5px;">
+            <div>⭐️ all tags in site</div>
+            <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
+        </div>
+        <hr style="margin:3px; border-color:white;"/>`
+
+    all.forEach(data => {
+
+        if (data == 'script' || data == 'style') return
+
+        let count = 0
+        nodes.forEach(c => {
+            if (c.tagName.toLowerCase() == data) {
+                count++
+            }
+        })
+
+        let tagInfo = document.createElement('div')
+        tagInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 0px 2px;">${data}-<span style="color:orange;">${count}</span></div>`
+
+        tagInfo.onmouseenter = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+                if (c.tagName.toLowerCase() == data) {
+                    c.style.boxShadow = `0 0 20px ${shadowColor}`
+                }
+            })
+        }
+        tagInfo.onmouseleave = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+            })
+        }
+        panel.appendChild(tagInfo)
+    })
+
+    return panel
+}
 
 function btnFetchIndex() {
     let zIdx = [...document.body.querySelectorAll('*')]
@@ -425,7 +491,7 @@ function showMark() {
         mark.style.top = y + 'px'
         mark.innerHTML = `
             <div style = "display:flex;">
-                <textarea placeholder="text is too large""></textarea>
+                <textarea placeholder="the text is too large""></textarea>
                 <span style="color:white; background:#000; padding:0px 6px; cursor: pointer;" onclick = "this.parentElement.parentElement.remove()">x</span>
             </div>`
         document.body.appendChild(mark)
@@ -438,7 +504,7 @@ function btnComments() {
     let p = document.getElementById('panel')
     p?.remove()
 
-    alert('please double click on screen, and then leave your comment. \nex: text is too small')
+    alert('please double click on screen, and then leave your comment. \nex: the text is too small')
 
 }
 
