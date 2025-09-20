@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
     addButton(panel, 'tags', btnFetchTags)
     addButton(panel, 'comments', btnComments)
     addButton(panel, 'printscreen', btnPrintscreen)
-    // addButton(panel, 'vertical-lines', btnVerticalLines)
+    addButton(panel, 'painter', btnPainter)
 })
 
 function setGlobalStyle() {
@@ -537,54 +537,46 @@ function btnPrintscreen() {
 
 }
 
-let showVLines = true
-function btnVerticalLines() {
+function btnPainter() {
 
-    let vx = []
-    let nodes = [...document.body.querySelectorAll('*')]
-    nodes.forEach(n => {
-        let l = n.getBoundingClientRect().left
-        let r = n.getBoundingClientRect().right
-        vx.push(l, r)
-    })
-
-    vx = [...new Set(vx)]
-
-    if (!showVLines) {
-        let p = document.getElementById('panel')
-        p?.remove()
-        console.log(p)
+    let canv = document.getElementById('painter')
+    if (canv) {
+        canv.onmousedown = null
+        canv.onmousemove = null
+        canv.onmouseup = null
+        canv.remove()
     } else {
 
-        let panel = document.createElement('div')
-        panel.id = 'panel'
-        panel.style.position = 'fixed'
-        panel.style.width = '100dvw'
-        panel.style.height = '100dvh'
-        panel.style.left = '0px'
-        panel.style.top = '0px'
-        panel.style.padding = '3px'
-        panel.style.background = '#00000033'
-        panel.style.zIndex = '99998'
-        document.body.appendChild(panel)
+        let bodyRect = document.body.getBoundingClientRect()
+        let canvas = document.createElement('canvas')
+        canvas.id = 'painter'
+        canvas.width = bodyRect.width
+        canvas.height = bodyRect.height
+        canvas.style.position = 'absolute'
+        canvas.style.left = '0px'
+        canvas.style.top = '0px'
+        document.body.appendChild(canvas)
 
-        vx.forEach(x => {
-
-            if (x == 210 || x == 222) return
-
-            let vline = document.createElement('div')
-            vline.className = 'vline'
-            vline.style.position = 'fixed'
-            vline.style.left = x + 'px'
-            vline.style.top = '0px'
-            vline.style.width = '1px'
-            vline.style.height = '100dvh'
-            vline.style.backgroundColor = 'red'
-            vline.setAttribute('info', `left=${x}px`)
-            panel.appendChild(vline)
-        })
-
+        let ctx = canvas.getContext('2d')
+        let px = 0
+        let py = 0
+        canvas.onmousedown = e => {
+            px = e.pageX
+            py = e.pageY
+            canvas.onmousemove = e => {
+                ctx.strokeStyle = 'red'
+                ctx.lineWidth = 2
+                ctx.beginPath()
+                ctx.moveTo(px, py)
+                ctx.lineTo(e.pageX, e.pageY)
+                ctx.stroke()
+                px = e.pageX
+                py = e.pageY
+            }
+        }
+        canvas.onmouseup = e => {
+            ctx.closePath()
+            canvas.onmousemove = null
+        }
     }
-
-    showVLines = !showVLines
 }
