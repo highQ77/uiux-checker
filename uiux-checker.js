@@ -14,7 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
     addButton(panel, 'tags', btnFetchTags)
     addButton(panel, 'comments', btnComments)
     addButton(panel, 'printscreen', btnPrintscreen)
-    addButton(panel, 'vertical-lines', btnVerticalLines)
+    // addButton(panel, 'vertical-lines', btnVerticalLines)
 })
 
 function setGlobalStyle() {
@@ -579,7 +579,7 @@ function btnVerticalLines() {
             vline.style.top = '0px'
             vline.style.width = '1px'
             vline.style.height = '100dvh'
-            vline.style.backgroundColor = shadowColor
+            vline.style.backgroundColor = 'red'
             vline.setAttribute('info', `left=${x}px`)
             panel.appendChild(vline)
         })
