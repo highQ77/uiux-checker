@@ -15,6 +15,9 @@ site checker for uiux & developer - 開發人員遵守 UIUX 設計的好工具
 <script src="./uiux-checker.js"></script>
 
 #### ⭐️ demo page
+
+[demo](https://highq77.github.io/uiux-checker/)
+
 ![comments](./img/comments.png)
 ![colors](./img/colors.png)
 ![functions](./img/functions.png)
