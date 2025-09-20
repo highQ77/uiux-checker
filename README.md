@@ -9,6 +9,8 @@ site checker for uiux & developer - 開發人員遵守 UIUX 設計的好工具
 
 ⭕️ z-index - 圖層深度規劃
 
+⭕️ tags - 結構探索
+
 ⭕️ comments & printscreen - 產生 uiux 與前後端工程師溝通文件
 
 #### ⭐️ install script
