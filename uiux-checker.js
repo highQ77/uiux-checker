@@ -14,6 +14,7 @@ window.addEventListener("DOMContentLoaded", () => {
     addButton(panel, 'tags', btnFetchTags)
     addButton(panel, 'comments', btnComments)
     addButton(panel, 'printscreen', btnPrintscreen)
+    addButton(panel, 'vertical-lines', btnVerticalLines)
 })
 
 function setGlobalStyle() {
@@ -37,6 +38,17 @@ function setGlobalStyle() {
             background: #006600cc;
             transform: translate(0px, -1.73em);
             scale: 1;
+        }
+        
+        .vline::before{
+            content: attr(info); 
+            font-size: 12px;
+            position: absolute;
+            bottom: 0px;
+            background: red;
+            color: white;
+            border-radius: 5px;
+            padding: 0px 5px;
         }
     `
     document.body.append(style)
@@ -175,7 +187,7 @@ function btnFetchColors() {
                     window.getComputedStyle(c).backgroundColor == color ||
                     window.getComputedStyle(c).borderColor == color ||
                     window.getComputedStyle(c).outlineColor == color) {
-                    c.style.boxShadow = `0 0 20px ${shadowColor}`
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
                 }
             })
         }
@@ -242,7 +254,7 @@ function btnFetchTags() {
             nodes.forEach(c => {
                 c.style.boxShadow = style[c]
                 if (c.tagName.toLowerCase() == data) {
-                    c.style.boxShadow = `0 0 20px ${shadowColor}`
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
                 }
             })
         }
@@ -300,7 +312,7 @@ function btnFetchIndex() {
             zIdx.forEach(c => {
                 c.style.boxShadow = style[c]
                 if (window.getComputedStyle(c).zIndex == z) {
-                    c.style.boxShadow = `0 0 10px ${shadowColor}`
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
                 }
             })
         }
@@ -358,7 +370,7 @@ function btnFetchFontSize() {
             nodes.forEach(c => {
                 c.style.boxShadow = style[c]
                 if (window.getComputedStyle(c).fontSize == z) {
-                    c.style.boxShadow = `0 0 10px ${shadowColor}`
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
                 }
             })
         }
@@ -416,7 +428,7 @@ function btnFetchBorderRadius() {
             nodes.forEach(c => {
                 c.style.boxShadow = style[c]
                 if (window.getComputedStyle(c).borderRadius == z) {
-                    c.style.boxShadow = `0 0 10px ${shadowColor}`
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
                 }
             })
         }
@@ -523,4 +535,56 @@ function btnPrintscreen() {
 
     alert('when you finish your comments editing, you can use build-in printscreen function of Chrome to download full page image. \n1) Open DevTools. \n2) Run Command(⌘ + Shift + P). \n3) Capture full size screenshot. ')
 
+}
+
+let showVLines = true
+function btnVerticalLines() {
+
+    let vx = []
+    let nodes = [...document.body.querySelectorAll('*')]
+    nodes.forEach(n => {
+        let l = n.getBoundingClientRect().left
+        let r = n.getBoundingClientRect().right
+        vx.push(l, r)
+    })
+
+    vx = [...new Set(vx)]
+
+    if (!showVLines) {
+        let p = document.getElementById('panel')
+        p?.remove()
+        console.log(p)
+    } else {
+
+        let panel = document.createElement('div')
+        panel.id = 'panel'
+        panel.style.position = 'fixed'
+        panel.style.width = '100dvw'
+        panel.style.height = '100dvh'
+        panel.style.left = '0px'
+        panel.style.top = '0px'
+        panel.style.padding = '3px'
+        panel.style.background = '#00000033'
+        panel.style.zIndex = '99998'
+        document.body.appendChild(panel)
+
+        vx.forEach(x => {
+
+            if (x == 210 || x == 222) return
+
+            let vline = document.createElement('div')
+            vline.className = 'vline'
+            vline.style.position = 'fixed'
+            vline.style.left = x + 'px'
+            vline.style.top = '0px'
+            vline.style.width = '1px'
+            vline.style.height = '100dvh'
+            vline.style.backgroundColor = shadowColor
+            vline.setAttribute('info', `left=${x}px`)
+            panel.appendChild(vline)
+        })
+
+    }
+
+    showVLines = !showVLines
 }
