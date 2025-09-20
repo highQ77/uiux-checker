@@ -56,11 +56,12 @@ function genPanel() {
     panel.style.zIndex = '99999'
     panel.style.transition = 'all .2s'
     panel.style.borderRight = '2px solid yellowgreen'
+    panel.style.fontFamily = 'Arial'
     panel.addEventListener('mouseenter', () => {
         panel.style.left = '0px'
     })
     panel.addEventListener('mouseleave', () => {
-        panel.style.left = '-195px'
+        panel.style.left = '-212px'
     })
     document.body.appendChild(panel)
     return panel
@@ -73,6 +74,8 @@ function addButton(parent, label = 'button', listener) {
     btn.style.borderRadius = '100px'
     btn.style.backgroundColor = '#FFFFFF66'
     btn.style.margin = '0px 0px 5px'
+    btn.style.color = 'white'
+    btn.style.fontSize = '14px'
     btn.onclick = listener
     parent.appendChild(btn)
 }
@@ -149,6 +152,7 @@ function btnFetchColors() {
     panel.style.background = '#000000CC'
     panel.style.backdropFilter = 'blur(10px)'
     panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
     document.body.appendChild(panel)
 
     panel.innerHTML = `
@@ -156,13 +160,13 @@ function btnFetchColors() {
             <div>⭐️ all colors in site</div>
             <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
         </div>
-        <hr style="margin:3px; border-color:white;"/>`
+        <hr style="margin:3px; border-color:#333;"/>`
 
     allColors.forEach(color => {
         let [r, g, b, a] = color.split('(')[1].split(')')[0].split(',').map(i => parseFloat(i.trim()))
         let [h, s, br] = RGB2HSB(r, g, b)
         let colorInfo = document.createElement('div')
-        colorInfo.innerHTML = `<div style="background-color:${color};color:${br > 50 ? 'black' : 'white'}; font-size:12px; padding: 0px 2px;">${a == undefined ? RGB2HEX(r, g, b) : RGBA2HEX(r, g, b, a)} | ${color}</div>`
+        colorInfo.innerHTML = `<div style="background-color:${color};color:${br > 50 ? 'black' : 'white'}; font-size:12px; padding: 5px 2px;">${a == undefined ? RGB2HEX(r, g, b) : RGBA2HEX(r, g, b, a)} | ${color}</div>`
 
         colorInfo.onmouseenter = () => {
             colors.forEach(c => {
@@ -210,6 +214,7 @@ function btnFetchTags() {
     panel.style.background = '#000000CC'
     panel.style.backdropFilter = 'blur(10px)'
     panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
     document.body.appendChild(panel)
 
     panel.innerHTML = `
@@ -217,7 +222,7 @@ function btnFetchTags() {
             <div>⭐️ all tags in site</div>
             <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
         </div>
-        <hr style="margin:3px; border-color:white;"/>`
+        <hr style="margin:3px; border-color:#333;"/>`
 
     all.forEach(data => {
 
@@ -231,7 +236,7 @@ function btnFetchTags() {
         })
 
         let tagInfo = document.createElement('div')
-        tagInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 0px 2px;">${data}-<span style="color:orange;">${count}</span></div>`
+        tagInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 5px 2px;">${data} - <span style="color:orange;">${count}</span></div>`
 
         tagInfo.onmouseenter = () => {
             nodes.forEach(c => {
@@ -277,6 +282,7 @@ function btnFetchIndex() {
     panel.style.background = '#000000CC'
     panel.style.backdropFilter = 'blur(10px)'
     panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
     document.body.appendChild(panel)
 
     panel.innerHTML = `
@@ -284,11 +290,11 @@ function btnFetchIndex() {
             <div>⭐️ all z-index in site</div>
             <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
         </div>
-        <hr style="margin:3px; border-color:white;"/>`
+        <hr style="margin:3px; border-color:#333;"/>`
 
     allZ.forEach(z => {
         let zInfo = document.createElement('div')
-        zInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 0px 2px;">${z}</div>`
+        zInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 5px 2px;">${z}</div>`
 
         zInfo.onmouseenter = () => {
             zIdx.forEach(c => {
@@ -334,6 +340,7 @@ function btnFetchFontSize() {
     panel.style.background = '#000000CC'
     panel.style.backdropFilter = 'blur(10px)'
     panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
     document.body.appendChild(panel)
 
     panel.innerHTML = `
@@ -341,11 +348,11 @@ function btnFetchFontSize() {
             <div>⭐️ all font-size in site</div>
             <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
         </div>
-        <hr style="margin:3px; border-color:white;"/>`
+        <hr style="margin:3px; border-color:#333;"/>`
 
     allFs.forEach(z => {
         let nodeInfo = document.createElement('div')
-        nodeInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 0px 2px;">${z}</div>`
+        nodeInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 5px 2px;">${z}</div>`
 
         nodeInfo.onmouseenter = () => {
             nodes.forEach(c => {
@@ -391,6 +398,7 @@ function btnFetchBorderRadius() {
     panel.style.background = '#000000CC'
     panel.style.backdropFilter = 'blur(10px)'
     panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
     document.body.appendChild(panel)
 
     panel.innerHTML = `
@@ -398,11 +406,11 @@ function btnFetchBorderRadius() {
             <div>⭐️ all border-radius in site</div>
             <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
         </div>
-        <hr style="margin:3px; border-color:white;"/>`
+        <hr style="margin:3px; border-color:#333;"/>`
 
     all.forEach(z => {
         let nodeInfo = document.createElement('div')
-        nodeInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 0px 2px;">${z}</div>`
+        nodeInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 5px 2px;">${z}</div>`
 
         nodeInfo.onmouseenter = () => {
             nodes.forEach(c => {
