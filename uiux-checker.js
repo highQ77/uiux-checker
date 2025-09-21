@@ -351,19 +351,30 @@ function btnFetchTree() {
         tagInfo.innerHTML = `<div style="display:flex; color: white; font-size:12px;">
             <span style="color:orange">${Array(level).fill('-').join('')}</span>
             <span>${tag}${data.id ? ('<b style="color:orange;">#' + data.id + '</b>') : ''} - ${level - 1}</span>
+            <span class='tag-size' style="color:white; background: transparent; border-radius: 99px; margin: 0px 5px; padding: 0px 5px;"></span>
         </div>`
+        let tagSize = tagInfo.getElementsByClassName('tag-size')[0]
+        tagSize.innerHTML = ''
 
         tagInfo.onmouseenter = () => {
             nodes.forEach(c => {
                 c.style.boxShadow = style[c]
                 if (c == data) {
+                    let rect = c.getBoundingClientRect()
+                    let computed = window.getComputedStyle(c)
+                    let { fontSize } = computed
                     c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
+                    window.scrollTo({ top: rect.top + window.scrollY - 100, behavior: 'smooth' })
+                    tagSize.innerHTML = `${~~rect.width}x${~~rect.height} font:${fontSize}`
+                    tagSize.style.background = 'green'
                 }
             })
         }
         tagInfo.onmouseleave = () => {
             nodes.forEach(c => {
                 c.style.boxShadow = style[c]
+                tagSize.innerHTML = ''
+                tagSize.style.background = 'transparent'
             })
         }
         panel.appendChild(tagInfo)
