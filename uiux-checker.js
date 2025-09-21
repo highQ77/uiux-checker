@@ -7,15 +7,36 @@ window.addEventListener("DOMContentLoaded", () => {
     showMark()
     let panel = genPanel()
     panel.innerHTML = '<div style="color: white; text-align: center; margin-bottom: 10px">UI/UX Checker</div>'
+
+    addText(panel, 'css properties')
     addButton(panel, 'colors', btnFetchColors)
     addButton(panel, 'font-size', btnFetchFontSize)
     addButton(panel, 'border-radius', btnFetchBorderRadius)
+    addButton(panel, 'border-width', btnFetchBorderWidth)
+    addButton(panel, 'outline-width', btnFetchOutlineWidth)
     addButton(panel, 'z-index', btnFetchIndex)
+    addText(panel, 'html structure')
     addButton(panel, 'tags', btnFetchTags)
+    addButton(panel, 'dom-tree', btnFetchTree)
+    addText(panel, 'note tools')
+    addButton(panel, 'painter', btnPainter)
     addButton(panel, 'comments', btnComments)
     addButton(panel, 'printscreen', btnPrintscreen)
-    addButton(panel, 'painter', btnPainter)
 })
+
+function addText(parent, labelText) {
+    let label = document.createElement('div')
+    label.innerHTML = labelText
+    label.style.width = '100%'
+    label.style.borderRadius = '100px'
+    label.style.backgroundColor = '#FFFFFF22'
+    label.style.margin = '0px 0px 5px'
+    label.style.color = 'yellowgreen'
+    label.style.fontSize = '14px'
+    label.style.textAlign = 'center'
+    label.style.marginTop = '10px'
+    parent.appendChild(label)
+}
 
 function setGlobalStyle() {
     let style = document.createElement('style')
@@ -269,6 +290,88 @@ function btnFetchTags() {
     return panel
 }
 
+function btnFetchTree() {
+
+    let nodes = [...document.body.querySelectorAll('*')]
+    let style = {}
+    nodes.forEach(c => {
+        style[c] = c.style.boxShadow
+    })
+
+    let p = document.getElementById('panel')
+    p?.remove()
+    console.log(p)
+
+    let panel = document.createElement('div')
+    panel.id = 'panel'
+    panel.style.position = 'fixed'
+    panel.style.width = '300px'
+    panel.style.right = '0px'
+    panel.style.top = '0px'
+    panel.style.padding = '3px'
+    panel.style.background = '#000000CC'
+    panel.style.backdropFilter = 'blur(10px)'
+    panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
+    panel.style.maxHeight = '600px'
+    panel.style.overflow = 'auto'
+    document.body.appendChild(panel)
+
+    panel.innerHTML = `
+        <div style="display: flex; justify-content: space-between; color: white; margin: 0px 5px;">
+            <div>⭐️ dom tree in site</div>
+            <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
+        </div>
+        <hr style="margin:3px; border-color:#333;"/>`
+
+    nodes.forEach(data => {
+
+        let parentE = data
+        if (data.id == 'panel') return
+        while (parentE = parentE.parentElement) {
+            if (parentE.id == 'panel') return
+        }
+        parentE = data
+        if (data.id == 'mainPanel') return
+        while (parentE = parentE.parentElement) {
+            if (parentE.id == 'mainPanel') return
+        }
+
+        if (data.id == 'screenSize') return
+
+        let tag = data.tagName.toLowerCase()
+        if (tag == 'script' || tag == 'style') return
+
+        let level = 0
+        let parent = data
+        while (parent = parent.parentElement) {
+            level++
+        }
+        let tagInfo = document.createElement('div')
+        tagInfo.innerHTML = `<div style="display:flex; color: white; font-size:12px;">
+            <span style="color:orange">${Array(level).fill('-').join('')}</span>
+            <span>${tag}${data.id ? ('<b style="color:orange;">#' + data.id + '</b>') : ''} - ${level - 1}</span>
+        </div>`
+
+        tagInfo.onmouseenter = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+                if (c == data) {
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
+                }
+            })
+        }
+        tagInfo.onmouseleave = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+            })
+        }
+        panel.appendChild(tagInfo)
+    })
+
+    return panel
+}
+
 function btnFetchIndex() {
     let zIdx = [...document.body.querySelectorAll('*')]
     let allZ = []
@@ -442,6 +545,123 @@ function btnFetchBorderRadius() {
 
     return panel
 }
+
+function btnFetchBorderWidth() {
+    let nodes = [...document.body.querySelectorAll('*')]
+    let all = []
+    let style = {}
+    nodes.forEach(c => {
+        let z = window.getComputedStyle(c).borderWidth
+        all.push(z)
+        style[c] = c.style.boxShadow
+    })
+
+    all = [...new Set(all)]
+
+    let p = document.getElementById('panel')
+    p?.remove()
+
+    let panel = document.createElement('div')
+    panel.id = 'panel'
+    panel.style.position = 'fixed'
+    panel.style.width = '300px'
+    panel.style.right = '0px'
+    panel.style.top = '0px'
+    panel.style.padding = '3px'
+    panel.style.background = '#000000CC'
+    panel.style.backdropFilter = 'blur(10px)'
+    panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
+    document.body.appendChild(panel)
+
+    panel.innerHTML = `
+        <div style="display: flex; justify-content: space-between; color: white; margin: 0px 5px;">
+            <div>⭐️ all border-width in site</div>
+            <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
+        </div>
+        <hr style="margin:3px; border-color:#333;"/>`
+
+    all.forEach(z => {
+        let nodeInfo = document.createElement('div')
+        nodeInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 5px 2px;">${z}</div>`
+
+        nodeInfo.onmouseenter = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+                if (window.getComputedStyle(c).borderWidth == z) {
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
+                }
+            })
+        }
+        nodeInfo.onmouseleave = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+            })
+        }
+        panel.appendChild(nodeInfo)
+    })
+
+    return panel
+}
+
+function btnFetchOutlineWidth() {
+    let nodes = [...document.body.querySelectorAll('*')]
+    let all = []
+    let style = {}
+    nodes.forEach(c => {
+        let z = window.getComputedStyle(c).outlineWidth
+        all.push(z)
+        style[c] = c.style.boxShadow
+    })
+
+    all = [...new Set(all)]
+
+    let p = document.getElementById('panel')
+    p?.remove()
+
+    let panel = document.createElement('div')
+    panel.id = 'panel'
+    panel.style.position = 'fixed'
+    panel.style.width = '300px'
+    panel.style.right = '0px'
+    panel.style.top = '0px'
+    panel.style.padding = '3px'
+    panel.style.background = '#000000CC'
+    panel.style.backdropFilter = 'blur(10px)'
+    panel.style.zIndex = '99999'
+    panel.style.fontFamily = 'Arial'
+    document.body.appendChild(panel)
+
+    panel.innerHTML = `
+        <div style="display: flex; justify-content: space-between; color: white; margin: 0px 5px;">
+            <div>⭐️ all outline-width in site</div>
+            <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
+        </div>
+        <hr style="margin:3px; border-color:#333;"/>`
+
+    all.forEach(z => {
+        let nodeInfo = document.createElement('div')
+        nodeInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 5px 2px;">${z}</div>`
+
+        nodeInfo.onmouseenter = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+                if (window.getComputedStyle(c).outlineWidth == z) {
+                    c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
+                }
+            })
+        }
+        nodeInfo.onmouseleave = () => {
+            nodes.forEach(c => {
+                c.style.boxShadow = style[c]
+            })
+        }
+        panel.appendChild(nodeInfo)
+    })
+
+    return panel
+}
+
 
 function showScreenSize() {
     let ss = document.createElement('div')
