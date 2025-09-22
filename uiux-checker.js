@@ -92,9 +92,11 @@ function genPanel() {
     panel.style.fontFamily = 'Arial'
     panel.addEventListener('mouseenter', () => {
         panel.style.left = '0px'
+        panel.style.opacity = '1'
     })
     panel.addEventListener('mouseleave', () => {
-        panel.style.left = '-212px'
+        panel.style.left = '-188px'
+        panel.style.opacity = '.2'
     })
     document.body.appendChild(panel)
     return panel
@@ -161,8 +163,8 @@ function btnFetchColors() {
         style[c] = c.style.boxShadow
     })
     allColors = [...new Set(allColors)]
-    let moreColors = allColors.filter(c => c.match(/rgb/ig).length > 1)
-    allColors = allColors.filter(c => c.match(/rgb/ig).length == 1)
+    let moreColors = allColors.filter(c => c.match(/rgb/ig)?.length > 1)
+    allColors = allColors.filter(c => c.match(/rgb/ig)?.length == 1)
     let moreColor = []
     moreColors.forEach((c, idx, all) => {
         for (let i = 0; i < all.length; i++) {
@@ -300,7 +302,6 @@ function btnFetchTree() {
 
     let p = document.getElementById('panel')
     p?.remove()
-    console.log(p)
 
     let panel = document.createElement('div')
     panel.id = 'panel'
@@ -349,7 +350,7 @@ function btnFetchTree() {
         }
         let tagInfo = document.createElement('div')
         tagInfo.innerHTML = `<div style="display:flex; color: white; font-size:12px;">
-            <span style="color:orange">${Array(level).fill('-').join('')}</span>
+            <span style="color:orange">${Array(level).fill('---').join('')}</span>
             <span>${tag}${data.id ? ('<b style="color:orange;">#' + data.id + '</b>') : ''} - ${level - 1}</span>
             <span class='tag-size' style="color:white; background: transparent; border-radius: 99px; margin: 0px 5px; padding: 0px 5px;"></span>
         </div>`
@@ -740,6 +741,7 @@ function showMark() {
         mark.style.position = 'absolute'
         mark.style.left = x + 'px'
         mark.style.top = y + 'px'
+        mark.style.backgroundColor = 'white'
         mark.innerHTML = `
             <div style = "display:flex;">
                 <textarea placeholder="the text is too large""></textarea>
