@@ -2,7 +2,7 @@ let sp = new URLSearchParams(location.search)
 
 if (sp.get('check')) {
 
-    let shadowColor = 'rgba(30, 63, 0, 1)'
+    let shadowColor = 'rgba(63, 0, 0, 1)'
 
     window.addEventListener("DOMContentLoaded", () => {
         setGlobalStyle()
@@ -311,7 +311,7 @@ if (sp.get('check')) {
         let panel = document.createElement('div')
         panel.id = 'panel'
         panel.style.position = 'fixed'
-        panel.style.width = '300px'
+        panel.style.minWidth = '300px'
         panel.style.right = '0px'
         panel.style.top = '0px'
         panel.style.padding = '3px'
