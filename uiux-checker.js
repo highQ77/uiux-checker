@@ -15,6 +15,7 @@ if (sp.get('check')) {
         addText(panel, 'css properties')
         addButton(panel, 'colors', btnFetchColors)
         addButton(panel, 'font-size', btnFetchFontSize)
+        addButton(panel, 'font-family', btnFetchFontFamily)
         addButton(panel, 'border-radius', btnFetchBorderRadius)
         addButton(panel, 'border-width', btnFetchBorderWidth)
         addButton(panel, 'outline-width', btnFetchOutlineWidth)
@@ -503,6 +504,65 @@ if (sp.get('check')) {
 
         return panel
     }
+
+    function btnFetchFontFamily() {
+        let nodes = [...document.body.querySelectorAll('*')]
+        let all = []
+        let style = {}
+        nodes.forEach(c => {
+            let z = window.getComputedStyle(c).fontFamily
+            all.push(z)
+            style[c] = c.style.boxShadow
+        })
+
+        all = [...new Set(all)]
+
+        let p = document.getElementById('panel')
+        p?.remove()
+
+        let panel = document.createElement('div')
+        panel.id = 'panel'
+        panel.style.position = 'fixed'
+        panel.style.minWidth = '300px'
+        panel.style.right = '0px'
+        panel.style.top = '0px'
+        panel.style.padding = '3px'
+        panel.style.background = '#000000CC'
+        panel.style.backdropFilter = 'blur(10px)'
+        panel.style.zIndex = '99999'
+        panel.style.fontFamily = 'Arial'
+        document.body.appendChild(panel)
+
+        panel.innerHTML = `
+        <div style="display: flex; justify-content: space-between; color: white; margin: 0px 5px;">
+            <div>⭐️ all font-family in site</div>
+            <div onclick="this.parentElement.parentElement.remove()" style="cursor:pointer;">x</div>
+        </div>
+        <hr style="margin:3px; border-color:#333;"/>`
+
+        all.forEach(z => {
+            let nodeInfo = document.createElement('div')
+            nodeInfo.innerHTML = `<div style="color: white; font-size:12px; padding: 5px 2px;">${z}</div>`
+
+            nodeInfo.onmouseenter = () => {
+                nodes.forEach(c => {
+                    c.style.boxShadow = style[c]
+                    if (window.getComputedStyle(c).outlineWidth == z) {
+                        c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
+                    }
+                })
+            }
+            nodeInfo.onmouseleave = () => {
+                nodes.forEach(c => {
+                    c.style.boxShadow = style[c]
+                })
+            }
+            panel.appendChild(nodeInfo)
+        })
+
+        return panel
+    }
+
 
     function btnFetchBorderRadius() {
         let nodes = [...document.body.querySelectorAll('*')]
