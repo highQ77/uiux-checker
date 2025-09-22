@@ -21,7 +21,7 @@ if (sp.get('check')) {
         addButton(panel, 'outline-width', btnFetchOutlineWidth)
         addButton(panel, 'z-index', btnFetchIndex)
         addText(panel, 'html structure')
-        addButton(panel, 'tags', btnFetchTags)
+        addButton(panel, 'tags-count', btnFetchTags)
         addButton(panel, 'dom-tree', btnFetchTree)
         addText(panel, 'note tools')
         addButton(panel, 'painter', btnPainter)
@@ -357,7 +357,7 @@ if (sp.get('check')) {
             tagInfo.innerHTML = `<div style="display:flex; color: white; font-size:12px;">
             <span style="color:orange">${Array(level).fill('---').join('')}</span>
             <span>${tag}${data.id ? ('<b style="color:orange;">#' + data.id + '</b>') : ''} - ${level - 1}</span>
-            <span class='tag-size' style="color:white; background: transparent; border-radius: 99px; margin: 0px 5px; padding: 0px 5px;"></span>
+            <span class='tag-size' style='display:flex;'></span>
         </div>`
             let tagSize = tagInfo.getElementsByClassName('tag-size')[0]
             tagSize.innerHTML = ''
@@ -368,11 +368,19 @@ if (sp.get('check')) {
                     if (c == data) {
                         let rect = c.getBoundingClientRect()
                         let computed = window.getComputedStyle(c)
-                        let { fontSize } = computed
+                        let { fontSize, color, backgroundColor } = computed
+                        let cc = [...new Set([...[color, backgroundColor]])]
+
+                        let rgbAndRgba = []
+                        cc = cc.map(color => {
+                            let [r, g, b, a] = color.split('(')[1].split(')')[0].split(',').map(i => parseFloat(i.trim()))
+                            let hex = a == undefined ? RGB2HEX(r, g, b) : RGBA2HEX(r, g, b, a)
+                            return { color, hex }
+                        })
+                        cc = cc.map(c => `<div style="display:inline-flex; width:10px; height:10px; background-color:${c.color}; border:1px solid white; margin:1px; cursor:pointer" onclick="alert('${c.color + ' ' + c.hex}')"></div>`).join(' ')
                         c.style.boxShadow = `inset 0 0 20px ${shadowColor}`
                         window.scrollTo({ top: rect.top + window.scrollY - 100, behavior: 'smooth' })
-                        tagSize.innerHTML = `${~~rect.width}x${~~rect.height} font:${fontSize}`
-                        tagSize.style.background = 'green'
+                        tagSize.innerHTML = `<span style="display:flex; justify-content: space-around; align-items:center; color:white; border-radius: 99px; margin: 0px 5px; padding: 0px 5px; background:green; ">${~~rect.width}x${~~rect.height} font:${fontSize}</span> &nbsp;<span style="margin-top:1px">${cc}</span>`
                     }
                 })
             }
