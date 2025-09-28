@@ -16,8 +16,19 @@ site checker for uiux & developer - 開發人員遵守 UIUX 設計的好工具
 #### ⭐️ install script
 <script src="./uiux-checker.js"></script>
 
-#### CDN
-<script src="https://cdn.jsdelivr.net/gh/highQ77/uiux-checker@master/uiux-checker-cdn.js"></script>
+#### ⭐️ CDN
+
+uiux-checker CDN
+
+```no-highlight
+https://cdn.jsdelivr.net/gh/highQ77/uiux-checker@master/uiux-checker-cdn.js
+```
+
+你可以使用下列腳本在 console 面板 (本腳本並無打 api 至外部 server 可安心使用)
+
+```no-highlight
+(()=>{document.body.appendChild(document.createElement('script')).src = 'https://cdn.jsdelivr.net/gh/highQ77/uiux-checker@master/uiux-checker-cdn.js'})()
+```
 
 #### ⭐️ demo page
 
