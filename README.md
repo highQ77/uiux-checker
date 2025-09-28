@@ -14,7 +14,10 @@ site checker for uiux & developer - 開發人員遵守 UIUX 設計的好工具
 ⭕️ comments & printscreen - 產生 uiux 與前後端工程師溝通文件
 
 #### ⭐️ install script
+
+```no-highlight
 <script src="./uiux-checker.js"></script>
+```
 
 #### ⭐️ CDN
 
